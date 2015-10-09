@@ -28,64 +28,64 @@ asm ( \
 ) 
 
 // intRes = intIn1 * intIn2 >> 16
-// uses:
-// r27 to store the byte 1 of the 32bit result
 #define MultiU16X16toH16(intRes, intIn1, intIn2) \
+({ \
+char _tmp_; \
 asm ( \
-"mul %A1, %A2 \n\t" \
-"mov r27, r1 \n\t" \
-"mul %B1, %B2 \n\t" \
+"mul %A2, %A3 \n\t" \
+"mov %1, r1 \n\t" \
+"mul %B2, %B3 \n\t" \
 "movw %A0, r0 \n\t" \
-"mul %B2, %A1 \n\t" \
-"add r27, r0 \n\t" \
+"mul %B3, %A2 \n\t" \
+"add %1, r0 \n\t" \
 "adc %A0, r1 \n\t" \
-"adc %B0, %3 \n\t" \
-"mul %B1, %A2 \n\t" \
-"add r27, r0 \n\t" \
+"adc %B0, %4 \n\t" \
+"mul %B2, %A3 \n\t" \
+"add %1, r0 \n\t" \
 "adc %A0, r1 \n\t" \
-"adc %B0, %3 \n\t" \
+"adc %B0, %4 \n\t" \
 "clr r1 \n\t" \
 : \
-"=&r" (intRes) \
+"=&r" (intRes), \
+"=&r", (_tmp_) \
 : \
 "a" (intIn1), \
 "a" (intIn2), \
 "r" (0) \
-: \
-"r27" \
 ) 
 
 // intRes = intIn1 * intIn2 >> 16 + round
 // uses:
-// r27 to store the byte 1 of the 32bit result
 // 21 cycles
 #define MultiU16X16toH16Round(intRes, intIn1, intIn2) \
+({ \
+char _tmp_; \
 asm ( \
-"mul %A1, %A2 \n\t" \
-"mov r27, r1 \n\t" \
-"mul %B1, %B2 \n\t" \
+"mul %A2, %A3 \n\t" \
+"mov %1, r1 \n\t" \
+"mul %B2, %B3 \n\t" \
 "movw %A0, r0 \n\t" \
-"mul %B2, %A1 \n\t" \
-"add r27, r0 \n\t" \
+"mul %B3, %A2 \n\t" \
+"add %1, r0 \n\t" \
 "adc %A0, r1 \n\t" \
-"adc %B0, %3 \n\t" \
-"mul %B1, %A2 \n\t" \
-"add r27, r0 \n\t" \
+"adc %B0, %4 \n\t" \
+"mul %B2, %A3 \n\t" \
+"add %1, r0 \n\t" \
 "adc %A0, r1 \n\t" \
-"adc %B0, %3 \n\t" \
-"lsl r27 \n\t" \
-"adc %A0, %3 \n\t" \
-"adc %B0, %3 \n\t" \
+"adc %B0, %4 \n\t" \
+"lsl %1 \n\t" \
+"adc %A0, %4 \n\t" \
+"adc %B0, %4 \n\t" \
 "clr r1 \n\t" \
 : \
-"=&r" (intRes) \
+"=&r" (intRes), \
+"=&r" (_tmp_) \
 : \
 "a" (intIn1), \
 "a" (intIn2), \
 "r" (0) \
-: \
-"r27" \
-) 
+); \
+})
 
 
 // signed16 * signed16
@@ -118,31 +118,33 @@ asm ( \
 
 // signed16 * signed 16 >> 16
 #define MultiS16X16toH16(intRes, intIn1, intIn2) \
+({ \
+char _tmp_; \
 asm ( \
-"mul %A1, %A2 \n\t" \
-"mov r27, r1 \n\t" \
-"muls %B1, %B2 \n\t" \
+"mul %A2, %A3 \n\t" \
+"mov %1, r1 \n\t" \
+"muls %B2, %B3 \n\t" \
 "movw %A0, r0 \n\t" \
-"mulsu %B2, %A1 \n\t" \
-"sbc %B0, %3 \n\t" \
-"add r27, r0 \n\t" \
+"mulsu %B3, %A2 \n\t" \
+"sbc %B0, %4 \n\t" \
+"add %1, r0 \n\t" \
 "adc %A0, r1 \n\t" \
-"adc %B0, %3 \n\t" \
-"mulsu %B1, %A2 \n\t" \
-"sbc %B0, %3 \n\t" \
-"add r27, r0 \n\t" \
+"adc %B0, %4 \n\t" \
+"mulsu %B2, %A3 \n\t" \
+"sbc %B0, %4 \n\t" \
+"add %1, r0 \n\t" \
 "adc %A0, r1 \n\t" \
-"adc %B0, %3 \n\t" \
+"adc %B0, %4 \n\t" \
 "clr r1 \n\t" \
 : \
-"=&r" (intRes) \
+"=&r" (intRes), \
+"=&r" (_tmp_) \
 : \
 "a" (intIn1), \
 "a" (intIn2), \
 "r" (0) \
-: \
-"r27" \
-)
+); \
+})
 
 // multiplies a signed and unsigned 16 bit ints with a 32 bit result
 #define MultiSU16X16to32(longRes, intIn1, intIn2) \
@@ -154,7 +156,7 @@ asm ( \
 "mul %B2, %A1 \n\t" \
 "add %B0, r0 \n\t" \
 "adc %C0, r1 \n\t" \
-"adc %D0, %3 \n\t" \
+"adc %D0, %4 \n\t" \
 "mulsu %B1, %A2 \n\t" \
 "sbc %D0, %3 \n\t" \
 "add %B0, r0 \n\t" \
@@ -162,7 +164,7 @@ asm ( \
 "adc %D0, %3 \n\t" \
 "clr r1 \n\t" \
 : \
-"=&r" (longRes) \
+"=&r" (longRes), \
 : \
 "a" (intIn1), \
 "a" (intIn2), \
@@ -171,60 +173,63 @@ asm ( \
 
 // multiplies signed x unsigned int and returns the highest 16 bits of the result
 #define MultiSU16X16toH16(intRes, intIn1, intIn2) \
+({ \
+char _tmp_; \
 asm ( \
-"mul %A1, %A2 \n\t" \
-"mov r27, r1 \n\t" \
-"mulsu %B1, %B2 \n\t" \
+"mul %A2, %A3 \n\t" \
+"mov %1, r1 \n\t" \
+"mulsu %B2, %B3 \n\t" \
 "movw %A0, r0 \n\t" \
-"mul %B2, %A1 \n\t" \
-"add r27, r0 \n\t" \
+"mul %B3, %A2 \n\t" \
+"add %1, r0 \n\t" \
 "adc %A0, r1 \n\t" \
-"adc %B0, %3 \n\t" \
-"mulsu %B1, %A2 \n\t" \
-"sbc %B0, %3 \n\t" \
-"add r27, r0 \n\t" \
+"adc %B0, %4 \n\t" \
+"mulsu %B2, %A3 \n\t" \
+"sbc %B0, %4 \n\t" \
+"add %1, r0 \n\t" \
 "adc %A0, r1 \n\t" \
-"adc %B0, %3 \n\t" \
+"adc %B0, %4 \n\t" \
 "clr r1 \n\t" \
 : \
-"=&r" (intRes) \
+"=&r" (intRes), \
+"=&r" (_tmp_) \
 : \
 "a" (intIn1), \
 "a" (intIn2), \
 "r" (0) \
-: \
-"r27" \
-)
+); \
+})
 
 // multiplies signed x unsigned int and returns the highest 16 bits of the result
 // rounds the result based on the MSB of the lower 16 bits
 // 22 cycles
 #define MultiSU16X16toH16Round(intRes, intIn1, intIn2) \
+({ \
+char _tmp_; \
 asm ( \
-"mul %A1, %A2 \n\t" \
-"mov r27, r1 \n\t" \
-"mulsu %B1, %B2 \n\t" \
+"mul %A2, %A3 \n\t" \
+"mov %1, r1 \n\t" \
+"mulsu %B2, %B3 \n\t" \
 "movw %A0, r0 \n\t" \
-"mul %A1, %B2 \n\t" \
-"add r27, r0 \n\t" \
+"mul %A2, %B3 \n\t" \
+"add %1, r0 \n\t" \
 "adc %A0, r1 \n\t" \
-"adc %B0, %3 \n\t" \
-"mulsu %B1, %A2 \n\t" \
-"sbc %B0, %3 \n\t" \
-"add r27, r0 \n\t" \
+"adc %B0, %4 \n\t" \
+"mulsu %B2, %A3 \n\t" \
+"sbc %B0, %4 \n\t" \
+"add %1, r0 \n\t" \
 "adc %A0, r1 \n\t" \
-"adc %B0, %3 \n\t" \
-"lsl r27 \n\t" \
-"adc %A0, %3 \n\t" \
-"adc %B0, %3 \n\t" \
+"adc %B0, %4 \n\t" \
+"lsl %1 \n\t" \
+"adc %A0, %4 \n\t" \
+"adc %B0, %4 \n\t" \
 "clr r1 \n\t" \
 : \
-"=&r" (intRes) \
+"=&r" (intRes), \
+"=&r" (_tmp_) \
 : \
 "a" (intIn1), \
 "a" (intIn2), \
-"r" (0), \
-: \
-"r27" \
-)
-
+"r" (0) \
+); \
+})
