@@ -8,7 +8,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 // rounds the number up if the MSB of the 2 low bytes is set
 // 47 cycles
 #define MultiSU32X16toH32Round(longRes, longIn1, intIn2) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t" \
 \
 \

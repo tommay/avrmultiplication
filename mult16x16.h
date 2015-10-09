@@ -5,7 +5,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 // longRes = intIn1 * intIn2
 #define MultiU16X16to32(longRes, intIn1, intIn2) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t" \
 "mul %A1, %A2 \n\t" \
 "movw %A0, r0 \n\t" \
@@ -34,7 +34,7 @@ asm volatile ( \
 // r26 to store 0
 // r27 to store the byte 1 of the 32bit result
 #define MultiU16X16toH16(intRes, intIn1, intIn2) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t" \
 "mul %A1, %A2 \n\t" \
 "mov r27, r1 \n\t" \
@@ -64,7 +64,7 @@ asm volatile ( \
 // r27 to store the byte 1 of the 32bit result
 // 21 cycles
 #define MultiU16X16toH16Round(intRes, intIn1, intIn2) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t" \
 "mul %A1, %A2 \n\t" \
 "mov r27, r1 \n\t" \
@@ -95,7 +95,7 @@ asm volatile ( \
 // signed16 * signed16
 // 22 cycles
 #define MultiS16X16to32(longRes, intIn1, intIn2) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t" \
 "mul %A1, %A2 \n\t" \
 "movw %A0, r0 \n\t" \
@@ -124,7 +124,7 @@ asm volatile ( \
 
 // signed16 * signed 16 >> 16
 #define MultiS16X16toH16(intRes, intIn1, intIn2) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t" \
 "mul %A1, %A2 \n\t" \
 "mov r27, r1 \n\t" \
@@ -152,7 +152,7 @@ asm volatile ( \
 
 // multiplies a signed and unsigned 16 bit ints with a 32 bit result
 #define MultiSU16X16to32(longRes, intIn1, intIn2) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t" \
 "mul %A1, %A2 \n\t" \
 "movw %A0, r0 \n\t" \
@@ -179,7 +179,7 @@ asm volatile ( \
 
 // multiplies signed x unsigned int and returns the highest 16 bits of the result
 #define MultiSU16X16toH16(intRes, intIn1, intIn2) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t" \
 "mul %A1, %A2 \n\t" \
 "mov r27, r1 \n\t" \
@@ -208,7 +208,7 @@ asm volatile ( \
 // rounds the result based on the MSB of the lower 16 bits
 // 22 cycles
 #define MultiSU16X16toH16Round(intRes, intIn1, intIn2) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t" \
 "mul %A1, %A2 \n\t" \
 "mov r27, r1 \n\t" \

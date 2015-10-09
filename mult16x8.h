@@ -6,7 +6,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 // multiplies 16 bit X 8 bit
 // stores lower 16 bits
 #define MultiSU16X8toL16(intRes, int16In, int8In) \
-asm volatile ( \
+asm ( \
 "mul %A1, %2 \n\t"\
 "movw %A0, r0 \n\t"\
 "mulsu %B1, %2 \n\t"\
@@ -23,7 +23,7 @@ asm volatile ( \
 // saves lower 16 bit
 // 8 cycles
 #define MultiSU16XConst8toL16(intRes, int16In, int8In) \
-asm volatile ( \
+asm ( \
 "ldi r22, %2 \n\t"\
 "mul %A1, r22 \n\t"\
 "movw %A0, r0 \n\t"\
@@ -41,7 +41,7 @@ asm volatile ( \
 
 // multiplies 16 bit number X 8 bit and stores 2 high bytes
 #define MultiSU16X8toH16(intRes, int16In, int8In) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t"\
 "mulsu %B1, %A2 \n\t"\
 "movw %A0, r0 \n\t"\
@@ -61,7 +61,7 @@ asm volatile ( \
 // multiplies 16 bit signed number X 8 bit and stores 2 high bytes
 // rounds the number based on the MSB of the lowest byte
 #define MultiSU16X8toH16Round(intRes, int16In, int8In) \
-asm volatile ( \
+asm ( \
 "clr r26 \n\t"\
 "mulsu %B1, %A2 \n\t"\
 "movw %A0, r0 \n\t"\
