@@ -146,6 +146,39 @@ asm ( \
 ); \
 })
 
+// fsigned16 * fsigned16
+// In the first adc, %A0 will never be 0xFF so there will be no carrry
+// to propagate to %B0.
+#define FMultiS16X16to16(intRes, intIn1, intIn2) \
+({ \
+char _tmp_; \
+asm ( \
+"fmuls %B2, %B3 \n\t" \
+"movw %A0, r0 \n\t" \
+"fmul %A2, %A3 \n\t" \
+"adc %A0, %4 \n\t" \
+"mov %1, r1 \n\t" \
+"fmulsu %B3, %A2 \n\t" \
+"sbc %B0, %4 \n\t" \
+"add %1, r0 \n\t" \
+"adc %A0, r1 \n\t" \
+"adc %B0, %4 \n\t" \
+"fmulsu %B2, %A3 \n\t" \
+"sbc %B0, %4 \n\t" \
+"add %1, r0 \n\t" \
+"adc %A0, r1 \n\t" \
+"adc %B0, %4 \n\t" \
+"clr r1 \n\t" \
+: \
+"=&r" (intRes), \
+"=&r" (_tmp_) \
+: \
+"a" (intIn1), \
+"a" (intIn2), \
+"r" (0) \
+); \
+})
+
 // multiplies a signed and unsigned 16 bit ints with a 32 bit result
 #define MultiSU16X16to32(longRes, intIn1, intIn2) \
 asm ( \
