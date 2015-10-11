@@ -179,6 +179,40 @@ asm ( \
 ); \
 })
 
+// fsigned16 * funsigned16 = fsigned16
+// This is MultiSU16X16toH16 with a left shift from %1 into H16.
+// It has been tested exhaustively.
+#define FMultiSU16X16to16(intRes, intIn1, intIn2) \
+({ \
+char _tmp_; \
+asm volatile ( \
+"mul %A2, %A3 \n\t" \
+"mov %1, r1 \n\t" \
+"mulsu %B2, %B3 \n\t" \
+"movw %A0, r0 \n\t" \
+"mul %B3, %A2 \n\t" \
+"add %1, r0 \n\t" \
+"adc %A0, r1 \n\t" \
+"adc %B0, %4 \n\t" \
+"mulsu %B2, %A3 \n\t" \
+"sbc %B0, %4 \n\t" \
+"add %1, r0 \n\t" \
+"adc %A0, r1 \n\t" \
+"adc %B0, %4 \n\t" \
+"lsl %1 \n\t" \
+"rol %A0 \n\t" \
+"rol %B0 \n\t" \
+"clr r1 \n\t" \
+: \
+"=&r" (intRes), \
+"=&r" (_tmp_) \
+: \
+"a" (intIn1), \
+"a" (intIn2), \
+"r" (0) \
+); \
+})
+
 // multiplies a signed and unsigned 16 bit ints with a 32 bit result
 #define MultiSU16X16to32(longRes, intIn1, intIn2) \
 asm ( \
